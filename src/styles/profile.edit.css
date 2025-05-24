@@ -1,0 +1,292 @@
+.profile-layout {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  display: flex;
+}
+
+.profile-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 256px;
+  background: white;
+  border-right: 1px solid #e5e7eb;
+  z-index: 1000;
+}
+
+.sidebar-menu {
+  border: none;
+  height: 100%;
+}
+
+.sidebar-menu .ant-menu-item {
+  height: 64px;
+  line-height: 64px;
+  border-bottom: 1px solid #e5e7eb;
+  margin: 0;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-menu .ant-menu-item:hover {
+  background-color: #f9fafb;
+}
+
+.sidebar-menu .ant-menu-item-selected {
+  background-color: transparent;
+}
+
+.sidebar-menu .ant-menu-item .ant-menu-item-icon {
+  color: #6b7280;
+  margin-right: 12px;
+}
+
+.sidebar-menu .ant-menu-item span {
+  color: #374151;
+}
+
+.profile-content {
+  margin-left: 256px;
+  padding: 32px;
+  background-color: #fff;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.profile-header {
+  margin-bottom: 32px;
+}
+
+.profile-title {
+  color: #374151 !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+}
+
+.avatar-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.avatar-container {
+  position: relative;
+}
+
+.profile-avatar {
+  border: 2px solid white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-avatar-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  color: white;
+  width: 32px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-avatar-btn:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.profile-form {
+  max-width: 800px;
+}
+
+.form-label {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.profile-input {
+  height: 40px;
+  border-color: #d1d5db;
+}
+
+.profile-input:hover,
+.profile-input:focus {
+  border-color: #3b82f6;
+}
+
+.save-button {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  height: 40px;
+  padding: 0 32px;
+  font-weight: 500;
+}
+
+.save-button:hover {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+@media (max-width: 768px) {
+  .profile-sidebar {
+    width: 200px !important;
+  }
+
+  .profile-content {
+    margin-left: 200px;
+    padding: 16px;
+  }
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .profile-sidebar {
+    position: static;
+    width: 100% !important;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .profile-content {
+    margin-left: 0;
+    padding: 8px;
+  }
+  .avatar-section {
+    margin-bottom: 16px;
+  }
+  .profile-form {
+    max-width: 100%;
+    padding: 0 4px;
+  }
+}
+
+
+/* Responsive Styles */
+@media (max-width: 1199px) {
+  .profile-content {
+    padding: 20px;
+  }
+  
+  .profile-form {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 991px) {
+  .profile-sidebar {
+    width: 220px !important;
+  }
+  
+  .profile-title {
+    font-size: 22px !important;
+  }
+  
+  .profile-form {
+    padding: 20px;
+  }
+  
+  .save-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .profile-layout {
+    flex-direction: column;
+  }
+  
+  .profile-sidebar {
+    width: 100% !important;
+    height: auto;
+    position: relative;
+  }
+  
+  .sidebar-menu {
+    display: flex;
+    overflow-x: auto;
+    padding: 8px 0;
+  }
+  
+  .sidebar-menu .ant-menu-item {
+    min-width: 120px;
+    margin: 0 4px;
+  }
+  
+  .profile-content {
+    padding: 16px;
+  }
+  
+  .profile-title {
+    font-size: 20px !important;
+  }
+  
+  .profile-form {
+    padding: 16px;
+  }
+  
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+  }
+  
+  .edit-avatar-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 575px) {
+  .profile-header {
+    margin-bottom: 24px;
+  }
+  
+  .profile-title {
+    font-size: 18px !important;
+  }
+  
+  .profile-form {
+    padding: 12px;
+  }
+  
+  .form-label {
+    font-size: 13px;
+  }
+  
+  .profile-input {
+    height: 40px;
+    font-size: 14px;
+  }
+  
+  .save-button {
+    height: 44px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 400px) {
+  .profile-content {
+    padding: 12px 8px;
+  }
+  
+  .profile-form {
+    padding: 12px 8px;
+  }
+  
+  .sidebar-menu .ant-menu-item {
+    min-width: 100px;
+    padding: 0 8px !important;
+    font-size: 13px;
+  }
+  
+  .sidebar-menu .anticon {
+    font-size: 14px;
+  }
+}
