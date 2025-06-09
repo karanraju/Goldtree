@@ -65,6 +65,12 @@ export default function Header() {
                                 >
                                     Contact Us
                                 </NavLink>
+                                <NavLink
+                                    to="/login"
+                                    className="text-white hover:bg-gray-50 hover:text-amber-300 rounded-md px-8 py-2 text-sm font-medium"
+                                >
+                                    Login
+                                </NavLink>
                             </div>
                         </div>
                     </div>
