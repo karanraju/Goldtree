@@ -1,5 +1,5 @@
 import RoutingConfig from "./config/routing.config";
-import styles from "./styles/app.module.css";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import './index.css'
 
 
