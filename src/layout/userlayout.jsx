@@ -104,8 +104,8 @@ const UserLayout = () => {
                             </a>
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <NavLink
+                                to="/user/contacts"
                                 className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100  group"
                             >
                                 <svg
@@ -122,8 +122,8 @@ const UserLayout = () => {
                                         d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
                                     />
                                 </svg>
-                                <span className="flex-1 ms-3 text-xs whitespace-nowrap">Manage Leads</span>
-                            </a>
+                                <span className="flex-1 ms-3 text-xs whitespace-nowrap">Manage Contact</span>
+                            </NavLink>
                         </li>
                         <li>
                             <a
