@@ -2,14 +2,19 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState } from "react";
+import { read, utils } from 'xlsx'
 
 const localizer = momentLocalizer(moment);
 
 const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
+  const [phones, setPhones] = useState([])
 
   const handleClick = () => {
     setShowModal(true)
+  }
+  const submitBtn=()=>{
+    window.alert("the data has been submitted")
   }
 
   const myEvents = [
@@ -19,6 +24,35 @@ const MyCalendar = () => {
       end: new Date(new Date().getTime() + 60 * 60 * 1000),
     },
   ];
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const fileName = file.name;
+      if (!fileName.endsWith(".xlsx")) {
+        alert("Please upload a .xlsx file");
+        e.target.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const data = new Uint8Array(evt.target.result);
+        const workbook = read(data, { type: "array" });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = utils.sheet_to_json(worksheet);
+
+
+        const phones = jsonData
+          .map(row => row.phone)
+          .filter(Boolean);
+
+        setPhones(phones);
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+  };
+
 
   return (
     <>
@@ -56,12 +90,16 @@ const MyCalendar = () => {
 
                   <div className="flex items-center space-x-4">
                     <label htmlFor="contact" className="w-32 font-medium">Contacts</label>
-                    <input
+                    <select
                       id="contact"
                       className="border border-black rounded p-2 w-full"
-                      type="text"
-                      placeholder="Type @number or contact name"
-                    />
+                    >
+                      <option value="">Select a phone number</option>
+                      {phones.map((num, index) => (
+                        <option key={index} value={num}>{num}</option>
+                      ))}
+                    </select>
+
                   </div>
 
                   <div className="flex items-center space-x-4">
@@ -70,6 +108,7 @@ const MyCalendar = () => {
                       id="file"
                       className="border border-black rounded p-2 w-full bg-white"
                       type="file"
+                      onChange={handleFileChange}
                     />
                   </div>
                   <button className="text-blue-500 self-start ml-32 hover:underline">Click here for typing Nepali</button>
@@ -83,13 +122,12 @@ const MyCalendar = () => {
                       placeholder="Write your message here"
                     ></textarea>
                   </div>
-                  <div>
-                    <button className="border border-black rounded m-2">standard</button>
-                    <button className="border border-black rounded m-2">standard</button>
-                    <button className="border border-black rounded m-2">standard</button>
-                    <button className="border border-black rounded m-2">standard</button>
+                  <div className="pl-6 w-auto flex flex-wrap gap-2 ml-24">
+                    <a className="border border-gray-300 rounded px-2 py-1">Standard</a>
+                    <a className="border border-gray-300 rounded px-2 py-1">Length</a>
+                    <a className="border border-gray-300 rounded px-2 py-1">Remaining</a>
+                    <a className="border border-gray-300 rounded px-2 py-1">Typed</a>
                   </div>
-
                 </div>
 
 
@@ -99,13 +137,24 @@ const MyCalendar = () => {
                   </div>
                 </div>
               </div>
+              <div className=" flex justify-between">
+                <button className="h-10 border bg-red-700 text-white rounded hover:bg-blue-800 mt-4 px-4 py-2"
+                  onClick={() => setShowModal(false)}
 
-              <button
-                className="bg-green-700 text-white h-10 px-4 py-2 rounded mt-4 self-end hover:bg-red-800"
-                onClick={() => setShowModal(false)}
-              >
-                Submit
-              </button>
+                >
+                  Cancel
+
+                </button>
+                <button
+                  className="bg-green-700 text-white h-10 px-4 py-2 rounded mt-4 hover:bg-red-800"
+                  onClick={() => submitBtn()}
+                >
+                  Submit
+                </button>
+
+              </div>
+
+
             </form>
           </div>
         </div>
