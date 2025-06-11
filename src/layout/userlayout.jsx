@@ -148,8 +148,8 @@ const UserLayout = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <NavLink
+                                to="/user/editprofile"
                                 className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100  group"
                             >
                                 <svg
@@ -167,7 +167,7 @@ const UserLayout = () => {
                                     />
                                 </svg>
                                 <span className="flex-1 ms-3 text-xs whitespace-nowrap">Edit Profile</span>
-                            </a>
+                            </NavLink>
                         </li>
                         <li>
                             <a

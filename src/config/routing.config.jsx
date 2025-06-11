@@ -8,6 +8,7 @@ import Gallery from '../pages/gallery';
 import UserReport from '../layout/user.report';
 import ManageContacts from '../layout/managecontacts';
 import MyCalendar from '../components/calendar/mycalendar';
+import EditProfile from '../layout/edit.profile';
 
 const RoutingConfig = () => {
   return (
@@ -23,6 +24,7 @@ const RoutingConfig = () => {
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="contacts" element={<ManageContacts/>} />
         <Route path="calendar" element={<MyCalendar/>}/>
+        <Route path="editProfile" element={<EditProfile/>}/>
       </Route>
     </Routes>
   );
