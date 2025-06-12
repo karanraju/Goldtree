@@ -9,11 +9,12 @@ const localizer = momentLocalizer(moment);
 const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [phones, setPhones] = useState([])
+  const [showCalender, setCalender] = useState(false);
 
   const handleClick = () => {
     setShowModal(true)
   }
-  const submitBtn=()=>{
+  const submitBtn = () => {
     window.alert("the data has been submitted")
   }
 
@@ -24,6 +25,10 @@ const MyCalendar = () => {
       end: new Date(new Date().getTime() + 60 * 60 * 1000),
     },
   ];
+  const showSmallCalender = (e) => {
+    setCalender(true)
+
+  }
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -128,8 +133,28 @@ const MyCalendar = () => {
                     <a className="border border-gray-300 rounded px-2 py-1">Remaining</a>
                     <a className="border border-gray-300 rounded px-2 py-1">Typed</a>
                   </div>
-                </div>
+                  <div className="text-blue-600 flex ml-24 px-4 pl-6 hover:underline">
+                    <a
+                      onClick={showSmallCalender}
+                    >Advance Options</a>
+                  </div>
+                  {
+                    showCalender && (
+                      <div className="flex flex-wrap gap-2 ml-24 w-auto">
+                        <div className="px-2 py-1 space-x-4">
+                          <label className="font-medium">From</label>
+                          <input className="border border-gray-400 rounded mt-4" type="date" />
+                        </div>
+                        <div className="px-2 py-1 space-x-4">
+                          <label className="font-medium">To</label>
+                          <input className="border border-gray-400 rounded mt-4" type="date" />
 
+                        </div>
+
+                      </div>
+                    )
+                  }
+                </div>
 
                 <div className="bg-white border rounded w-1/3 shadow-md">
                   <div className="w-full bg-gray-600 text-center py-2 rounded-t">
