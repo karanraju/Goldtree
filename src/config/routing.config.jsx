@@ -9,6 +9,7 @@ import UserReport from '../layout/user.report';
 import ManageContacts from '../layout/managecontacts';
 import MyCalendar from '../components/calendar/mycalendar';
 import EditProfile from '../layout/edit.profile';
+import FilterByCountry from '../layout/user.bynumber';
 
 const RoutingConfig = () => {
   return (
@@ -25,6 +26,7 @@ const RoutingConfig = () => {
         <Route path="contacts" element={<ManageContacts/>} />
         <Route path="calendar" element={<MyCalendar/>}/>
         <Route path="editProfile" element={<EditProfile/>}/>
+        <Route path="bycountry" element={<FilterByCountry/>}/>
       </Route>
     </Routes>
   );
