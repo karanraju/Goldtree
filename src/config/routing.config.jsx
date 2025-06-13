@@ -10,6 +10,8 @@ import ManageContacts from '../layout/managecontacts';
 import MyCalendar from '../components/calendar/mycalendar';
 import EditProfile from '../layout/edit.profile';
 import FilterByCountry from '../layout/user.bynumber';
+import LoginPage from '../pages/login/login.page';
+import RegisterPage from '../pages/register/register.page';
 
 const RoutingConfig = () => {
   return (
@@ -28,6 +30,9 @@ const RoutingConfig = () => {
         <Route path="editProfile" element={<EditProfile/>}/>
         <Route path="bycountry" element={<FilterByCountry/>}/>
       </Route>
+      <Route path="/login" element={<LoginPage/>}/>
+      <Route path="/register" element={<RegisterPage/>}/>
+
     </Routes>
   );
 };
