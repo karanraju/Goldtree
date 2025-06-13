@@ -1,9 +1,8 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 const FilterByCountry = () => {
-    const [filterCountry, setFilterCountry] = useState("")
-    const [filteredData, setFilteredData] = useState(tableData)
     const tableData = [
         {
             name: "kamal",
@@ -61,6 +60,29 @@ const FilterByCountry = () => {
         }
     ];
 
+    const [filterCountry, setFilterCountry] = useState("")
+    const [filteredData, setFilteredData] = useState(tableData)
+    const handleBuy = () => {
+        Swal.fire({
+            title: 'Are you sure ?',
+            text: "You are about to buy this number!",
+            icon: "warnning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, buy it!'
+        }).then((result)=>{
+            if(result.isConfirmed){
+                Swal.fire(
+                    'Bought!',
+                    "You are about to take this number.",
+                    'success'
+
+                )
+            }
+        })
+    }
+
 
     const filterPhone = (e) => {
         const newData = filterCountry.trim().toLowerCase()
@@ -103,10 +125,11 @@ const FilterByCountry = () => {
                 <table className="table-auto w-[98%] mt-4 ml-1 bg-white shadow-lg rounded-md overflow-hidden">
                     <thead className="bg-blue-600 text-white text-md">
                         <tr className="h-14">
-                            <th className="px-4 py-2 text-left">Name</th>
-                            <th className="px-4 py-2 text-left">Roll No</th>
-                            <th className="px-4 py-2 text-left">Country</th>
-                            <th className="px-4 py-2 text-left">Phone</th>
+                            <th className="px-4 py-2 text-center">Name</th>
+                            <th className="px-4 py-2 text-center">Roll No</th>
+                            <th className="px-4 py-2 text-center">Country</th>
+                            <th className="px-4 py-2 text-center">Phone</th>
+                            <th className="px-4 py-2 text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody className="text-gray-700">
@@ -116,10 +139,13 @@ const FilterByCountry = () => {
                                 className={`h-14 hover:bg-blue-50 transition duration-200 ${index % 2 === 0 ? "bg-gray-100" : "bg-white"
                                     }`}
                             >
-                                <td className="px-4 py-2">{data.name}</td>
-                                <td className="px-4 py-2">{data.rollno}</td>
-                                <td className="px-4 py-2">{data.country}</td>
-                                <td className="px-4 py-2">{data.phone}</td>
+                                <td className="px-4 py-2 text-center">{data.name}</td>
+                                <td className="px-4 py-2 text-center">{data.rollno}</td>
+                                <td className="px-4 py-2 text-center">{data.country}</td>
+                                <td className="px-4 py-2 text-center">{data.phone}</td>
+                                <td className="text-center"><button className="border-2 rounded-full bg-green-600 text-white w-28 h-8 hover:bg-red-600"
+                                    onClick={handleBuy}
+                                >Buy Number</button></td>
                             </tr>
                         ))}
                     </tbody>

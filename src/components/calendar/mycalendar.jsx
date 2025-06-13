@@ -10,6 +10,7 @@ const MyCalendar = () => {
   const [showModal, setShowModal] = useState(false);
   const [phones, setPhones] = useState([])
   const [showCalender, setCalender] = useState(false);
+  const [currentDate, setCurrenntDate]= useState(new Date())
 
   const handleClick = () => {
     setShowModal(true)
@@ -70,10 +71,13 @@ const MyCalendar = () => {
           selectable={true}
           onSelectSlot={handleClick}
           views={["month", "week", "day", "work_week"]}
-          defaultView="month"
+          date={currentDate}
+          onNavigate={(date) => setCurrenntDate(date)}
+          // defaultView="month"
           style={{ height: "100%" }}
         />
       </div>
+
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
