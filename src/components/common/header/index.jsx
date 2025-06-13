@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Search, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,7 +32,9 @@ export default function Header() {
             <div className="ml-10 flex items-baseline space-x-4">
               <button className="flex items-center px-3 py-2 text-sm font-medium text-black-700 hover:text-blue-600 transition-colors">
                 <Menu className="w-7 h-7 mr-1 text-gray-700" />
-                <span className="text-lg text-gray-600 font-medium">All Course</span>
+                <span className="text-lg text-gray-600 font-medium">
+                  All Course
+                </span>
               </button>
             </div>
           </div>
@@ -81,45 +84,51 @@ export default function Header() {
         {/* Secondary navigation */}
         <div className="border-t border-gray-200">
           <div className="flex items-center space-x-8 py-3 overflow-x-auto">
-            <a
-              href="#"
-              className="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+            <NavLink
+              to="/"
+              className="group flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
             >
               Offers
               <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full ml-2">
                 New
               </span>
-            </a>
+              <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
+            </NavLink>
             <a
               href="#"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+              className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
             >
               Success Gallery
+              <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
             </a>
             <a
               href="#"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+              className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
             >
               Student Testimonials
+              <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
             </a>
             <a
               href="#"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+              className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
             >
               Upcoming Classes <span className="text-blue-600">(48)</span>
+              <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
             </a>
             <a
               href="#"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+              className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
             >
               Career
+              <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
             </a>
-            <a
-              href="#"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap"
+            <NavLink
+              to="/blog"
+              className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
             >
               Blog
-            </a>
+              <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
+            </NavLink>
           </div>
         </div>
       </div>
