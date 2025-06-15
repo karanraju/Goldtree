@@ -101,13 +101,13 @@ export default function Header() {
               Success Gallery
               <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
             </NavLink>
-            <a
-              href="#"
+            <NavLink
+              to="/testimonials"
               className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
             >
               Student Testimonials
               <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
-            </a>
+            </NavLink>
             <a
               href="#"
               className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"

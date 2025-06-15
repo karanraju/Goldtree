@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BlogSection from "../pages/blog";
 import HomeLayout from "../layout/home.layout";
 import Gallery from "../pages/gallery";
+import StudentTestimonials from "../pages/student.testimonials";
+
 const RoutingConfig = () => {
   return (
     <BrowserRouter>
@@ -9,6 +11,7 @@ const RoutingConfig = () => {
         <Route path="/" element={<HomeLayout />} />
 
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/testimonials" element={<StudentTestimonials />} />
         <Route path="/blog" element={<BlogSection />} />
       </Routes>
     </BrowserRouter>

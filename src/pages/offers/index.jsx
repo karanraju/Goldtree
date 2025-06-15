@@ -8,7 +8,7 @@ export default function Offer() {
       <div className="bg-gradient-to-r from-red-300 to-orange-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div className="-mt-20">
+            <div className="-mt-10">
               <h2 className="text-gray-700 font-medium text-xl mb-4">
                 18% OFF FOR +2 APPEARED STUDENTS
               </h2>
