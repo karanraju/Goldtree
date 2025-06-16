@@ -1,6 +1,7 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import Pagination from "../components/pagination";
 
 const FilterByCountry = () => {
     const tableData = [
@@ -71,8 +72,8 @@ const FilterByCountry = () => {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, buy it!'
-        }).then((result)=>{
-            if(result.isConfirmed){
+        }).then((result) => {
+            if (result.isConfirmed) {
                 Swal.fire(
                     'Bought!',
                     "You are about to take this number.",
@@ -102,7 +103,7 @@ const FilterByCountry = () => {
 
     return (
         <>
-            <div className=" border border-black rounded w-full h-[100vh] bg-gray-100">
+            <div className=" border border-black rounded w-full h-auto bg-gray-100">
                 <div className="space-x-2 mt-2 mb-2 pl-1">
                     <label className="font-semibold">Choose the country</label>
                     <select className="border border-gray-500 rounded" name="Select Country" id=""
@@ -150,6 +151,12 @@ const FilterByCountry = () => {
                         ))}
                     </tbody>
                 </table>
+                <div className="mt-4 flex justify-end text-sm text-gray-600 mb-2 px-2">
+                    <div className="flex items-center gap-1">
+                        <Pagination />
+
+                    </div>
+                </div>
 
 
             </div>

@@ -1,6 +1,32 @@
+import { info } from "autoprefixer";
+import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const UserLayout = () => {
+    const [showModal, setShowModal]= useState(false);
+
+    const handleClick=()=>{
+        Swal.fire({
+            title: "Are you sure you want to Log Out ?",
+            showDenyButton: true,
+            icon:'warning',
+            confirmButtonText:"Yes",
+            denyButtonText:"Cancel"
+        }).then((result)=>{
+            if(result.isConfirmed){
+                Swal.fire({
+                    title:"Log Out",
+                    icon:"success"
+
+
+                });
+            }else if(result.isDenied){
+                Swal.fire("Unable to log out", "", "info")
+            }
+        })
+        console.log("this is me show modal")
+    }
     return (
         <>
             <aside
@@ -186,8 +212,8 @@ const UserLayout = () => {
                                 className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                             >
 
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                    <path fill-rule="evenodd" d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6Zm-5.03 4.72a.75.75 0 0 0 0 1.06l1.72 1.72H2.25a.75.75 0 0 0 0 1.5h10.94l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 0 0-1.06 0Z" clip-rule="evenodd" />
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                    <path fillRule="evenodd" d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6Zm-5.03 4.72a.75.75 0 0 0 0 1.06l1.72 1.72H2.25a.75.75 0 0 0 0 1.5h10.94l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 0 0-1.06 0Z" clipRule="evenodd" />
                                 </svg>
 
 
@@ -199,8 +225,9 @@ const UserLayout = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <NavLink
+                                to="#"
+                                onClick={handleClick}
                                 className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                             >
                                 <svg
@@ -217,8 +244,9 @@ const UserLayout = () => {
                                         d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
                                     />
                                 </svg>
-                                <span className="flex-1 ms-3 text-xs whitespace-nowrap">Logout</span>
-                            </a>
+                                <span className="flex-1 ms-3 text-xs whitespace-nowrap"
+                                >Logout</span>
+                            </NavLink>
                         </li>
                     </ul>
                 </div>

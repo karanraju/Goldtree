@@ -2,6 +2,7 @@ import { useState } from "react";
 import { PencilIcon, TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 import handleClick from "../components/common/alert";
 import handleEditClick from "../components/common/alert/edit";
+import Pagination from "../components/pagination";
 
 const contactData = [
   {
@@ -123,21 +124,8 @@ const ManageContacts = () => {
       <div className="mt-4 flex justify-between text-sm text-gray-600">
         <span>Displaying 1–6 of 6</span>
         <div className="flex items-center gap-1">
-          <button className="px-2 py-1 border rounded text-gray-500 bg-gray-100" disabled>
-            First
-          </button>
-          <button className="px-2 py-1 border rounded text-gray-500 bg-gray-100" disabled>
-            Previous
-          </button>
-          <span className="px-2">
-            Page <input className="w-10 border rounded text-center" defaultValue="1" /> of 1
-          </span>
-          <button className="px-2 py-1 border rounded text-gray-500 bg-gray-100" disabled>
-            Next
-          </button>
-          <button className="px-2 py-1 border rounded text-gray-500 bg-gray-100" disabled>
-            Last
-          </button>
+          <Pagination/>
+
         </div>
       </div>
 
