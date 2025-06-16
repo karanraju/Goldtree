@@ -3,6 +3,8 @@ import BlogSection from "../pages/blog";
 import HomeLayout from "../layout/home.layout";
 import Gallery from "../pages/gallery";
 import StudentTestimonials from "../pages/student.testimonials";
+import UpcomingClasses from "../pages/upcoming.classes";
+import Cardlink from "../pages/upcoming.classes/cardlink.jsx";
 
 const RoutingConfig = () => {
   return (
@@ -12,6 +14,9 @@ const RoutingConfig = () => {
 
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/testimonials" element={<StudentTestimonials />} />
+        <Route path="/upcoming_classes" element={<UpcomingClasses />}>
+          <Route path=":classId" element={<Cardlink />} />
+        </Route>
         <Route path="/blog" element={<BlogSection />} />
       </Routes>
     </BrowserRouter>

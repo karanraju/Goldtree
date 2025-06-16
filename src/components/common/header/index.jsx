@@ -108,13 +108,13 @@ export default function Header() {
               Student Testimonials
               <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
             </NavLink>
-            <a
-              href="#"
+            <NavLink
+              to="/upcoming_classes"
               className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
             >
               Upcoming Classes <span className="text-blue-600">(48)</span>
               <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
-            </a>
+            </NavLink>
             <a
               href="#"
               className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
