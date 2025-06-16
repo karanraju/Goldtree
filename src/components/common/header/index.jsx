@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 

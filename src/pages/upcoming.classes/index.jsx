@@ -3,6 +3,7 @@ import Header from "../../components/common/header";
 import Footer from "../../components/common/footer";
 import UpcomingClassPopUp from "./upcoming.popup";
 import { Calendar, Clock, FileImage } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Main Gird Component
 const upcomingClassesData = [
@@ -245,6 +246,7 @@ const upcomingClassesData = [
 export default function UpcomingClasses() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isModalOpen, setIsModelOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleMoreClassesClick = (course) => {
     setSelectedCourse(course);
@@ -254,6 +256,10 @@ export default function UpcomingClasses() {
   const closeModal = () => {
     setIsModelOpen(false);
     setSelectedCourse(null);
+  };
+
+  const goToAbout = () => {
+    navigate("/blog");
   };
 
   return (
@@ -275,9 +281,10 @@ export default function UpcomingClasses() {
               <div
                 key={course.id}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-                onClick={() =>
-                  course.link ? (window.location.href = course.link) : null
-                }
+                // onClick={() =>
+                //   course.link ? (window.location.href = course.link) : null
+                // }
+                onClick={goToAbout}
               >
                 {/* Course Image/header */}
                 <div
