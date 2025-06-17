@@ -15,9 +15,8 @@ const RoutingConfig = () => {
 
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/testimonials" element={<StudentTestimonials />} />
-        <Route path="/upcoming_classes" element={<UpcomingClasses />}>
-          <Route path=":classId" element={<Cardlink />} />
-        </Route>
+        <Route path="/upcoming_classes" element={<UpcomingClasses />} />
+        <Route path="/upcoming_classes/:classId" element={<Cardlink />} />
         <Route path="/career" element={<CareerPage />} />
         <Route path="/blog" element={<BlogSection />} />
       </Routes>

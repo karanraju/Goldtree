@@ -258,8 +258,8 @@ export default function UpcomingClasses() {
     setSelectedCourse(null);
   };
 
-  const goToAbout = () => {
-    navigate("/blog");
+  const goToCardLink = () => {
+    navigate(":classId");
   };
 
   return (
@@ -284,7 +284,7 @@ export default function UpcomingClasses() {
                 // onClick={() =>
                 //   course.link ? (window.location.href = course.link) : null
                 // }
-                onClick={goToAbout}
+                onClick={goToCardLink}
               >
                 {/* Course Image/header */}
                 <div
