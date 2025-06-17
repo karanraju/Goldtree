@@ -5,6 +5,7 @@ import Gallery from "../pages/gallery";
 import StudentTestimonials from "../pages/student.testimonials";
 import UpcomingClasses from "../pages/upcoming.classes";
 import Cardlink from "../pages/upcoming.classes/cardlink.jsx";
+import CareerPage from "../pages/career";
 
 const RoutingConfig = () => {
   return (
@@ -17,6 +18,7 @@ const RoutingConfig = () => {
         <Route path="/upcoming_classes" element={<UpcomingClasses />}>
           <Route path=":classId" element={<Cardlink />} />
         </Route>
+        <Route path="/career" element={<CareerPage />} />
         <Route path="/blog" element={<BlogSection />} />
       </Routes>
     </BrowserRouter>

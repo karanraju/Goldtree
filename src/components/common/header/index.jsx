@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
-
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -116,13 +115,13 @@ export default function Header() {
               Upcoming Classes <span className="text-blue-600">(48)</span>
               <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
             </NavLink>
-            <a
-              href="#"
+            <NavLink
+              to="/career"
               className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
             >
               Career
               <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full group-hover:left-0 transition-all duration-300 origin-center" />
-            </a>
+            </NavLink>
             <NavLink
               to="/blog"
               className="group text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors whitespace-nowrap relative"
