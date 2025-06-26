@@ -16,22 +16,31 @@ const RegisterPage = () => {
     const { register, handleSubmit, formState: { errors, } } = useForm({
         resolver: yupResolver(rules)
     })
-    const submitEvent = async(data) => {
+    // const submitEvent = async(data) => {
+    //     try {
+    //         const response = await axiosInstance.post("/users/register", {
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             }
+    //         })
+    //     }catch(exception){
+    //         console.log("Register Exception :", exception)
+
+    //     }
+
+    //     console.log(data)
+    //     window.alert("yout code has been submitted")
+
+    // }
+    const submitEvent = async (data) => {
         try {
-            const response = await axiosInstance.post("/", {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            })
-        }catch(exception){
-            console.log("Register Exception :", exception)
-
+            const response = await axiosInstance.post("/users/register", data);
+            console.log("Response:", response.data);
+        } catch (exception) {
+            console.log("Register Exception:", exception.response?.data || exception.message);
         }
+    };
 
-        console.log(data)
-        window.alert("yout code has been submitted")
-
-    }
 
     const navigate = useNavigate()
 
@@ -56,7 +65,7 @@ const RegisterPage = () => {
                                 <input {...register("email")} type="text" className="border-b-2 focus:outline-none" placeholder="Enter your @email" />
                                 <p className="text-red-500">{errors?.email?.message}</p>
 
-                                
+
                                 <label>Password</label>
                                 <input {...register("password")} type="password" className="border-b-2 focus:outline-none" placeholder="Enter your password" />
                                 <p className="text-red-500">{errors?.password?.message}</p>
