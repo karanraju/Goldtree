@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { SocialIcon } from "react-social-icons";
 import * as Yup from "yup";
 import axiosInstance from "../../config/axios.config";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -24,8 +27,14 @@ const LoginPage = () => {
     const submitForm = async (data) => {
         try {
             const response = await axiosInstance.post("users/login", data);
-            console.log(response.data);
-            navigate("/user/dashboard"); 
+            console.log(response);
+            const accessToken = response.token
+            localStorage.setItem("accessToken", accessToken);
+            toast.success(`Welcomet to user Dashboard`)
+            setTimeout(() => {
+                navigate("/user/dashboard");
+            }, 1000);
+
 
         } catch (error) {
             console.log(error);
@@ -46,8 +55,10 @@ const LoginPage = () => {
         }
     };
 
+
     return (
         <>
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
             <div className="flex bg-gradient-to-r from-indigo-500 via-purple-500 to-green-400 h-[100vh] w-full justify-center items-center">
                 <div className="flex flex-col bg-white w-[44%] h-[550px] rounded-xl items-center">
                     <h1 className="text-center mt-2 font-bold text-2xl">Login</h1>

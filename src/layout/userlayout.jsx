@@ -15,11 +15,10 @@ const UserLayout = () => {
             denyButtonText:"Cancel"
         }).then((result)=>{
             if(result.isConfirmed){
+                localStorage.clear(); 
                 Swal.fire({
                     title:"Log Out",
                     icon:"success"
-
-
                 });
             }else if(result.isDenied){
                 Swal.fire("Unable to log out", "", "info")
