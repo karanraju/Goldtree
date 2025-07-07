@@ -4,23 +4,23 @@ import { NavLink, Outlet } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const UserLayout = () => {
-    const [showModal, setShowModal]= useState(false);
+    const [showModal, setShowModal] = useState(false);
 
-    const handleClick=()=>{
+    const handleClick = () => {
         Swal.fire({
             title: "Are you sure you want to Log Out ?",
             showDenyButton: true,
-            icon:'warning',
-            confirmButtonText:"Yes",
-            denyButtonText:"Cancel"
-        }).then((result)=>{
-            if(result.isConfirmed){
-                localStorage.clear(); 
+            icon: 'warning',
+            confirmButtonText: "Yes",
+            denyButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.clear();
                 Swal.fire({
-                    title:"Log Out",
-                    icon:"success"
+                    title: "Log Out",
+                    icon: "success"
                 });
-            }else if(result.isDenied){
+            } else if (result.isDenied) {
                 Swal.fire("Unable to log out", "", "info")
             }
         })
@@ -203,6 +203,21 @@ const UserLayout = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                                 </svg>
                                 <span className="flex-1 ms-3 text-xs whitespace-nowrap">By Number</span>
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                to="/user/creategroup"
+                                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+
+                            >
+
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                                </svg>
+
+                                <span className="flex-1 ms-3 text-xs whitespace-nowrap">Create Group</span>
+
                             </NavLink>
                         </li>
                         <li>
