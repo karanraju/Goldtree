@@ -1,41 +1,80 @@
-import { useState, useEffect } from "react";
-import axiosInstance from "../config/axios.config";
+import { useState } from "react";
+import * as XLSX from "xlsx";
+import * as Yup from "yup";
+import axiosInstance from "../config/axios.config"; // Ensure baseURL is set correctly
 
 const CreateGroup = () => {
-    const [contacts, setContacts] = useState([]);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [selectedContacts, setSelectedContacts] = useState([]);
     const [groupName, setGroupName] = useState("");
+    const [phoneNumbers, setPhoneNumbers] = useState([]);
+    const [fileName, setFileName] = useState("");
 
-    const handleClick = async () => {
+    const validationSchema = Yup.object({
+        groupName: Yup.string().min(2).max(20).required("Group name is required"),
+        fileName: Yup.string().required("File is required"),
+        contactList: Yup.array().min(1, "At least one number required").required(),
+    });
+
+    const handleXLSXUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setFileName(file.name);
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const binaryStr = event.target.result;
+            const workbook = XLSX.read(binaryStr, { type: "binary" });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const data = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+            const numbers = data
+                .map((row) => row.phoneNumber || row.phone || "")
+                .filter((num) => num !== "");
+
+            setPhoneNumbers(numbers);
+        };
+        reader.readAsBinaryString(file);
+    };
+
+    const handleSubmitGroup = async () => {
+        const formData = {
+            groupName: groupName.trim(),
+            fileName,
+            contactList: phoneNumbers,
+        };
+
         try {
-            const response = await axiosInstance.get("/usersContact/contacts");
-            console.log("Response", response.data);
-            setContacts(response.data);
-            setShowDropdown(true);
-        } catch (error) {
-            console.log("Data fetching exception:", error.response);
-        }
-    };
+            await validationSchema.validate(formData, { abortEarly: false });
 
-    const handleSelectContact = (contact) => {
-        if (!selectedContacts.some((c) => c.id === contact.id)) {
-            setSelectedContacts([...selectedContacts, contact]);
-        }
-        setShowDropdown(false);
-    };
+            const response = await axiosInstance.post("/groups", formData, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                },
+            });
 
-    const handleSubmitGroup = () => {
-        console.log("Group Name:", groupName);
-        console.log("Selected Contacts:", selectedContacts);
-        alert("Group Created");
+            alert("Group Created Successfully!");
+            console.log(response.data);
+            setGroupName("");
+            setFileName("");
+            setPhoneNumbers([]);
+        } catch (err) {
+            if (err.name === "ValidationError") {
+                alert(err.errors.join("\n"));
+            } else if (err.response) {
+                alert("Server Error: " + err.response.data.message);
+            } else {
+                alert("Error: " + err.message);
+            }
+        }
     };
 
     return (
         <div className="bg-white w-full rounded p-4 space-y-4">
             <div>
                 <label className="block font-bold mb-1">Group Name</label>
-                <input 
+                <input
                     className="border border-black w-full p-1 rounded"
                     type="text"
                     value={groupName}
@@ -43,49 +82,29 @@ const CreateGroup = () => {
                 />
             </div>
 
-            <div className="relative">
-                <label className="block font-bold mb-1">Contacts</label>
-                <input 
-                    onClick={handleClick}
-                    className="border border-black w-full p-1 rounded cursor-pointer"
-                    type="text"
-                    placeholder="Click to select contacts"
-                    readOnly
+            <div>
+                <label className="block font-bold mb-1">Upload Contacts (.xlsx)</label>
+                <input
+                    type="file"
+                    accept=".xlsx, .xls"
+                    onChange={handleXLSXUpload}
+                    className="block w-full border p-1 border-gray-400 rounded"
                 />
-
-                {showDropdown && (
-                    <div className="absolute z-10 bg-white border border-gray-300 w-full max-h-40 overflow-y-auto mt-1 rounded shadow">
-                        {contacts.length > 0 ? (
-                            contacts.map((contact) => (
-                                <div 
-                                    key={contact.id} 
-                                    onClick={() => handleSelectContact(contact)}
-                                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                                >
-                                    {contact.name} - {contact.phone}
-                                </div>
-                            ))
-                        ) : (
-                            <div className="p-2 text-gray-500">No contacts available</div>
-                        )}
-                    </div>
-                )}
+                {fileName && <p className="text-sm mt-1 text-gray-600">Uploaded: {fileName}</p>}
             </div>
 
-            {selectedContacts.length > 0 && (
+            {phoneNumbers.length > 0 && (
                 <div>
-                    <h3 className="font-semibold mb-2">Selected Contacts:</h3>
+                    <h3 className="font-semibold mb-2">Imported Phone Numbers:</h3>
                     <ul className="list-disc pl-5">
-                        {selectedContacts.map((contact) => (
-                            <li key={contact.id}>
-                                {contact.name} - {contact.phone}
-                            </li>
+                        {phoneNumbers.map((number, idx) => (
+                            <li key={idx}>{number}</li>
                         ))}
                     </ul>
                 </div>
             )}
 
-            <button 
+            <button
                 className="bg-green-600 text-white px-4 py-2 rounded-full mt-4"
                 onClick={handleSubmitGroup}
             >

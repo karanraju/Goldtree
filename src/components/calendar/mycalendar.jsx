@@ -1,9 +1,10 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { read, utils } from "xlsx";
 import axiosInstance from "../../config/axios.config";
+
 const localizer = momentLocalizer(moment);
 
 const MyCalendar = () => {
@@ -11,16 +12,26 @@ const MyCalendar = () => {
   const [phones, setPhones] = useState([]);
   const [showCalender, setCalender] = useState(false);
   const [currentDate, setCurrenntDate] = useState(new Date());
-
   const [identity, setIdentity] = useState("");
   const [selectedPhone, setSelectedPhone] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [groups, setGroups] = useState([]);
+
+  const myEvents = [
+    {
+      title: "Meeting",
+      start: new Date(),
+      end: new Date(new Date().getTime() + 60 * 60 * 1000),
+    },
+  ];
 
   const handleClick = () => {
     setShowModal(true);
+    fetchGroups();
   };
+
   const submitBtn = async (e) => {
     e.preventDefault();
 
@@ -29,9 +40,9 @@ const MyCalendar = () => {
       return;
     }
 
-       const formattedNumbers = selectedPhone.map(num => {
-      return num.startsWith("+") ? num : `+${num}`;
-    });
+    const formattedNumbers = selectedPhone.map((num) =>
+      num.startsWith("+") ? num : `+${num}`
+    );
 
     const payload = {
       numbers: formattedNumbers,
@@ -42,6 +53,7 @@ const MyCalendar = () => {
       const res = await axiosInstance.post("/numbers/message", payload);
       alert("Messages sent successfully!");
       console.log(res);
+      console.log(res.groups.length)
       setShowModal(false);
     } catch (error) {
       console.error(error);
@@ -49,18 +61,7 @@ const MyCalendar = () => {
     }
   };
 
-
-  const myEvents = [
-    {
-      title: "Meeting",
-      start: new Date(),
-      end: new Date(new Date().getTime() + 60 * 60 * 1000),
-    },
-  ];
-
-  const showSmallCalender = () => {
-    setCalender(true);
-  };
+  const showSmallCalender = () => setCalender(true);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -81,9 +82,24 @@ const MyCalendar = () => {
 
         const phones = jsonData.map((row) => row.phone).filter(Boolean);
         setPhones(phones);
+        fetchGroups();
       };
 
       reader.readAsArrayBuffer(file);
+    }
+  };
+
+  const fetchGroups = async () => {
+    try {
+      const response = await axiosInstance.get("/groups/getGroups", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+      console.log("the response is: ", response)
+      setGroups(response.groups || []);
+    } catch (error) {
+      console.error("Error fetching groups:", error);
     }
   };
 
@@ -220,7 +236,18 @@ const MyCalendar = () => {
                 <div className="bg-white border rounded w-1/3 shadow-md">
                   <div className="w-full bg-gray-600 text-center py-2 rounded-t">
                     <h1 className="text-white text-lg font-semibold">Contact Group</h1>
-                                      
+                  </div>
+                  <div className="p-2 max-h-60 overflow-y-auto">
+                    {groups.length > 0 ? (
+                      groups.map((group, index) => (
+                        <div key={index} className="p-2 border-b text-sm">
+                          <strong>{group.groupName}</strong><br />
+                          {group?.length || 0} contacts
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-500 text-sm">No groups yet</p>
+                    )}
                   </div>
                 </div>
               </div>
