@@ -1,7 +1,7 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { read, utils } from "xlsx";
 import axiosInstance from "../../config/axios.config";
 
@@ -13,11 +13,13 @@ const MyCalendar = () => {
   const [showCalender, setCalender] = useState(false);
   const [currentDate, setCurrenntDate] = useState(new Date());
   const [identity, setIdentity] = useState("");
-  const [selectedPhone, setSelectedPhone] = useState([]);
+  const [selectedPhones, setSelectedPhones] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [groups, setGroups] = useState([]);
+  const [expandedGroupIndex, setExpandedGroupIndex] = useState(null);
+  const [checkedGroups, setCheckedGroups] = useState(new Set()); // To store selected groups by index
 
   const myEvents = [
     {
@@ -35,12 +37,12 @@ const MyCalendar = () => {
   const submitBtn = async (e) => {
     e.preventDefault();
 
-    if (selectedPhone.length === 0 || !inputMsg) {
-      alert("Please select at least one phone number and enter a message.");
+    if (selectedPhones.length === 0 || !inputMsg) {
+      // Removed alerts - can add inline validation UI if you want
       return;
     }
 
-    const formattedNumbers = selectedPhone.map((num) =>
+    const formattedNumbers = selectedPhones.map((num) =>
       num.startsWith("+") ? num : `+${num}`
     );
 
@@ -50,14 +52,10 @@ const MyCalendar = () => {
     };
 
     try {
-      const res = await axiosInstance.post("/numbers/message", payload);
-      alert("Messages sent successfully!");
-      console.log(res);
-      console.log(res.groups.length)
+      await axiosInstance.post("/numbers/message", payload);
       setShowModal(false);
     } catch (error) {
       console.error(error);
-      alert("Failed to send messages.");
     }
   };
 
@@ -68,7 +66,6 @@ const MyCalendar = () => {
     if (file) {
       const fileName = file.name;
       if (!fileName.endsWith(".xlsx")) {
-        alert("Please upload a .xlsx file");
         e.target.value = "";
         return;
       }
@@ -80,8 +77,8 @@ const MyCalendar = () => {
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = utils.sheet_to_json(worksheet);
 
-        const phones = jsonData.map((row) => row.phone).filter(Boolean);
-        setPhones(phones);
+        const phonesFromFile = jsonData.map((row) => row.phone).filter(Boolean);
+        setPhones(phonesFromFile);
         fetchGroups();
       };
 
@@ -96,11 +93,53 @@ const MyCalendar = () => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      console.log("the response is: ", response)
-      setGroups(response.groups || []);
+
+      const formattedGroups = response.groups.map((group) => ({
+        ...group,
+        contactList:
+          typeof group.contactList === "string"
+            ? JSON.parse(group.contactList)
+            : group.contactList,
+      }));
+
+      setGroups(formattedGroups);
     } catch (error) {
       console.error("Error fetching groups:", error);
     }
+  };
+
+  // When checkedGroups change, update selectedPhones accordingly (combine contacts from all checked groups)
+  useEffect(() => {
+    let combinedContacts = [];
+
+    checkedGroups.forEach((index) => {
+      const group = groups[index];
+      if (group && Array.isArray(group.contactList)) {
+        // Extract just the phone numbers (assuming contactList items have number or are strings)
+        const groupContacts = group.contactList.map((contact) =>
+          typeof contact === "object" ? contact.number || "" : contact
+        );
+        combinedContacts = [...combinedContacts, ...groupContacts];
+      }
+    });
+
+    // Remove duplicates and empty strings
+    combinedContacts = Array.from(new Set(combinedContacts.filter(Boolean)));
+
+    setPhones(combinedContacts);
+    setSelectedPhones(combinedContacts);
+  }, [checkedGroups, groups]);
+
+  const toggleGroupCheck = (index) => {
+    setCheckedGroups((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -152,12 +191,12 @@ const MyCalendar = () => {
                       id="contact"
                       className="border border-black rounded p-2 w-full"
                       multiple
-                      value={selectedPhone}
+                      value={selectedPhones}
                       onChange={(e) => {
                         const selectedOptions = Array.from(e.target.selectedOptions).map(
                           (option) => option.value
                         );
-                        setSelectedPhone(selectedOptions);
+                        setSelectedPhones(selectedOptions);
                       }}
                     >
                       {phones.map((num, index) => (
@@ -233,16 +272,54 @@ const MyCalendar = () => {
                   )}
                 </div>
 
+                {/* Group View Panel */}
+                {/* Group View Panel */}
                 <div className="bg-white border rounded w-1/3 shadow-md">
                   <div className="w-full bg-gray-600 text-center py-2 rounded-t">
-                    <h1 className="text-white text-lg font-semibold">Contact Group</h1>
+                    <h1 className="text-white text-lg font-semibold">Contact Groups</h1>
                   </div>
                   <div className="p-2 max-h-60 overflow-y-auto">
                     {groups.length > 0 ? (
                       groups.map((group, index) => (
                         <div key={index} className="p-2 border-b text-sm">
-                          <strong>{group.groupName}</strong><br />
-                          {group?.length || 0} contacts
+                          <div className="flex justify-between items-center">
+                            <label className="flex items-center space-x-2 cursor-pointer text-sm">
+                              <input
+                                type="checkbox"
+                                checked={checkedGroups.has(index)}
+                                onChange={() => toggleGroupCheck(index)}
+                                className="w-4 h-4"
+                              />
+                              <span>
+                                <strong>{group.groupName}</strong> -{" "}
+                                {Array.isArray(group.contactList)
+                                  ? `${group.contactList.length} contacts`
+                                  : "0 contacts"}
+                              </span>
+                            </label>
+
+                            <button
+                              className="bg-blue-500 text-white px-2 py-1 rounded text-xs"
+                              onClick={() =>
+                                setExpandedGroupIndex(expandedGroupIndex === index ? null : index)
+                              }
+                              type="button"
+                            >
+                              {expandedGroupIndex === index ? "Hide" : "View"}
+                            </button>
+                          </div>
+
+                          {expandedGroupIndex === index && Array.isArray(group.contactList) && (
+                            <ul className="mt-2 ml-6 list-disc text-xs max-h-32 overflow-y-auto">
+                              {group.contactList.map((contact, i) => (
+                                <li key={i}>
+                                  {typeof contact === "object"
+                                    ? `${contact.number || "No Number"}`
+                                    : contact}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </div>
                       ))
                     ) : (
@@ -250,6 +327,7 @@ const MyCalendar = () => {
                     )}
                   </div>
                 </div>
+
               </div>
 
               <div className="flex justify-between">
