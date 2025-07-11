@@ -13,6 +13,7 @@ import FilterByCountry from '../layout/user.bynumber';
 import LoginPage from '../pages/login/login.page';
 import RegisterPage from '../pages/register/register.page';
 import CreateGroup from '../layout/createGroup';
+import EditGroup from '../layout/editGroupById';
 
 const RoutingConfig = () => {
 
@@ -43,6 +44,7 @@ const RoutingConfig = () => {
           <Route path="editProfile" element={<EditProfile />} />
           <Route path="bycountry" element={<FilterByCountry />} />
           <Route path="createGroup" element={<CreateGroup/>}/>
+          <Route path="editGroup/:id" element={<EditGroup/>}/>
         </Route>
 
         <Route path="/login" element={<LoginPage />} />

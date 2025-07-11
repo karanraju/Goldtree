@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import * as Yup from "yup";
 import axiosInstance from "../config/axios.config";
+import handleClick from "../components/common/alert";
+import handleEditClick from "../components/common/alert/edit";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 const CreateGroup = () => {
+    const navigate = useNavigate();
     const [groupName, setGroupName] = useState("");
     const [phoneNumbers, setPhoneNumbers] = useState([]);
     const [fileName, setFileName] = useState("");
     const [groups, setGroups] = useState([]);
     const [showModal, setShowModal] = useState(false);
-
-    // Fetch groups
     const fetchGroups = async () => {
         try {
             const response = await axiosInstance.get("/groups/getGroups", {
@@ -134,6 +137,7 @@ const CreateGroup = () => {
                             <th className="px-6 py-3 border-b">Contact List</th>
                             <th className="px-6 py-3 border-b">Created By</th>
                             <th className="px-6 py-3 border-b">Created Time</th>
+                            <th className="px-6 py-3 border-b">Action Button</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -145,6 +149,26 @@ const CreateGroup = () => {
                                 <td className="px-6 py-4 border-b">{group.contactList?.length || 0} contacts</td>
                                 <td className="px-6 py-4 border-b">{group.createdBy || "N/A"}</td>
                                 <td className="px-6 py-4 border-b">{new Date(group.createdAt).toLocaleString()}</td>
+                                <td className="border px-4 py-2 text-center">
+
+                                    <button
+                                        onClick={() => handleEditClick(group.id, navigate)}
+                                        className="text-blue-600 mx-4 hover:text-blue-800"
+                                    >
+                                        <PencilIcon className="w-5 h-5" />
+                                    </button>
+
+                                    <button
+                                        onClick={() => handleClick(group.id)}
+                                        className="text-red-600 hover:text-red-800"
+                                    >
+                                        <TrashIcon className="w-5 h-5" />
+                                    </button>
+
+
+
+                                </td>
+
                             </tr>
                         ))}
                     </tbody>
