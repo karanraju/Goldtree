@@ -2,15 +2,29 @@ import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import * as Yup from "yup";
 import axiosInstance from "../config/axios.config";
+import handleClick from "../components/common/alert";
+import handleEditClick from "../components/common/alert/edit";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 const CreateGroup = () => {
+    const navigate = useNavigate();
     const [groupName, setGroupName] = useState("");
     const [phoneNumbers, setPhoneNumbers] = useState([]);
     const [fileName, setFileName] = useState("");
     const [groups, setGroups] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
-    // Fetch groups
+    
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 1;
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentGroups = groups.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(groups.length / itemsPerPage);
+
     const fetchGroups = async () => {
         try {
             const response = await axiosInstance.get("/groups/getGroups", {
@@ -134,10 +148,11 @@ const CreateGroup = () => {
                             <th className="px-6 py-3 border-b">Contact List</th>
                             <th className="px-6 py-3 border-b">Created By</th>
                             <th className="px-6 py-3 border-b">Created Time</th>
+                            <th className="px-6 py-3 border-b">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {groups.map((group, index) => (
+                        {currentGroups.map((group, index) => (
                             <tr key={group._id || index} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 border-b">{group.id}</td>
                                 <td className="px-6 py-4 border-b">{group.groupName}</td>
@@ -145,10 +160,45 @@ const CreateGroup = () => {
                                 <td className="px-6 py-4 border-b">{group.contactList?.length || 0} contacts</td>
                                 <td className="px-6 py-4 border-b">{group.createdBy || "N/A"}</td>
                                 <td className="px-6 py-4 border-b">{new Date(group.createdAt).toLocaleString()}</td>
+                                <td className="border px-4 py-2 text-center">
+                                    <button
+                                        onClick={() => handleEditClick(group.id, navigate)}
+                                        className="text-blue-600 mx-4 hover:text-blue-800"
+                                    >
+                                        <PencilIcon className="w-5 h-5" />
+                                    </button>
+                                    <button
+                                        onClick={() => handleClick(group.id)}
+                                        className="text-red-600 hover:text-red-800"
+                                    >
+                                        <TrashIcon className="w-5 h-5" />
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            <div className="mt-4 flex justify-between items-center text-sm text-gray-600 px-4">
+                <span>
+                    Displaying {indexOfFirstItem + 1}–{Math.min(indexOfLastItem, groups.length)} of {groups.length}
+                </span>
+                <div className="flex gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => setCurrentPage(i + 1)}
+                            className={`px-3 py-1 border rounded ${
+                                currentPage === i + 1
+                                    ? "bg-green-500 text-white"
+                                    : "bg-white hover:bg-gray-100"
+                            }`}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {showModal && (
