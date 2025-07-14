@@ -19,7 +19,7 @@ const MyCalendar = () => {
   const [toDate, setToDate] = useState("");
   const [groups, setGroups] = useState([]);
   const [expandedGroupIndex, setExpandedGroupIndex] = useState(null);
-  const [checkedGroups, setCheckedGroups] = useState(new Set()); // To store selected groups by index
+  const [checkedGroups, setCheckedGroups] = useState(new Set());
 
   const myEvents = [
     {
@@ -36,11 +36,7 @@ const MyCalendar = () => {
 
   const submitBtn = async (e) => {
     e.preventDefault();
-
-    if (selectedPhones.length === 0 || !inputMsg) {
-      // Removed alerts - can add inline validation UI if you want
-      return;
-    }
+    if (selectedPhones.length === 0 || !inputMsg) return;
 
     const formattedNumbers = selectedPhones.map((num) =>
       num.startsWith("+") ? num : `+${num}`
@@ -79,6 +75,7 @@ const MyCalendar = () => {
 
         const phonesFromFile = jsonData.map((row) => row.phone).filter(Boolean);
         setPhones(phonesFromFile);
+        setSelectedPhones(phonesFromFile);
         fetchGroups();
       };
 
@@ -108,27 +105,34 @@ const MyCalendar = () => {
     }
   };
 
-  // When checkedGroups change, update selectedPhones accordingly (combine contacts from all checked groups)
+  // Show contacts from localStorage OR selected groups
   useEffect(() => {
-    let combinedContacts = [];
+    const savedContacts = localStorage.getItem("selectedContacts");
+    const parsedSavedContacts = savedContacts ? JSON.parse(savedContacts) : [];
 
-    checkedGroups.forEach((index) => {
-      const group = groups[index];
-      if (group && Array.isArray(group.contactList)) {
-        // Extract just the phone numbers (assuming contactList items have number or are strings)
-        const groupContacts = group.contactList.map((contact) =>
-          typeof contact === "object" ? contact.number || "" : contact
-        );
-        combinedContacts = [...combinedContacts, ...groupContacts];
+    if (showModal) {
+      if (checkedGroups.size === 0) {
+        setPhones(parsedSavedContacts);
+        setSelectedPhones(parsedSavedContacts);
+      } else {
+        let combinedContacts = [];
+
+        checkedGroups.forEach((index) => {
+          const group = groups[index];
+          if (group && Array.isArray(group.contactList)) {
+            const groupContacts = group.contactList.map((contact) =>
+              typeof contact === "object" ? contact.number || "" : contact
+            );
+            combinedContacts = [...combinedContacts, ...groupContacts];
+          }
+        });
+
+        combinedContacts = Array.from(new Set(combinedContacts.filter(Boolean)));
+        setPhones(combinedContacts);
+        setSelectedPhones(combinedContacts);
       }
-    });
-
-    // Remove duplicates and empty strings
-    combinedContacts = Array.from(new Set(combinedContacts.filter(Boolean)));
-
-    setPhones(combinedContacts);
-    setSelectedPhones(combinedContacts);
-  }, [checkedGroups, groups]);
+    }
+  }, [showModal, checkedGroups, groups]);
 
   const toggleGroupCheck = (index) => {
     setCheckedGroups((prev) => {
@@ -166,9 +170,7 @@ const MyCalendar = () => {
               <div className="flex space-x-2">
                 <div className="flex bg-white flex-col p-6 rounded w-full max-w-2xl space-y-4 shadow-md">
                   <div className="flex items-center space-x-4">
-                    <label htmlFor="identity" className="w-32 font-medium">
-                      Identity
-                    </label>
+                    <label htmlFor="identity" className="w-32 font-medium">Identity</label>
                     <select
                       id="identity"
                       className="border border-black rounded p-2 w-full"
@@ -184,9 +186,7 @@ const MyCalendar = () => {
                   </div>
 
                   <div className="flex items-center space-x-4">
-                    <label htmlFor="contact" className="w-32 font-medium">
-                      Contacts
-                    </label>
+                    <label htmlFor="contact" className="w-32 font-medium">Contacts</label>
                     <select
                       id="contact"
                       className="border border-black rounded p-2 w-full"
@@ -208,9 +208,7 @@ const MyCalendar = () => {
                   </div>
 
                   <div className="flex items-center space-x-4">
-                    <label htmlFor="file" className="w-32 font-medium">
-                      Input File
-                    </label>
+                    <label htmlFor="file" className="w-32 font-medium">Input File</label>
                     <input
                       id="file"
                       className="border border-black rounded p-2 w-full bg-white"
@@ -224,9 +222,7 @@ const MyCalendar = () => {
                   </button>
 
                   <div className="flex items-start space-x-4">
-                    <label htmlFor="message" className="w-32 pt-2 font-medium">
-                      Message
-                    </label>
+                    <label htmlFor="message" className="w-32 pt-2 font-medium">Message</label>
                     <textarea
                       id="message"
                       className="border border-black rounded p-2 w-full"
@@ -272,8 +268,6 @@ const MyCalendar = () => {
                   )}
                 </div>
 
-                {/* Group View Panel */}
-                {/* Group View Panel */}
                 <div className="bg-white border rounded w-1/3 shadow-md">
                   <div className="w-full bg-gray-600 text-center py-2 rounded-t">
                     <h1 className="text-white text-lg font-semibold">Contact Groups</h1>
@@ -327,7 +321,6 @@ const MyCalendar = () => {
                     )}
                   </div>
                 </div>
-
               </div>
 
               <div className="flex justify-between">
