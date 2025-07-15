@@ -14,6 +14,8 @@ import LoginPage from '../pages/login/login.page';
 import RegisterPage from '../pages/register/register.page';
 import CreateGroup from '../layout/createGroup';
 import EditGroup from '../layout/editGroupById';
+import SendWhatsAppMsg from '../components/twilio/sendWhatsApp';
+import SendEmail from '../components/twilio/sendEmail';
 
 const RoutingConfig = () => {
 
@@ -30,6 +32,8 @@ const RoutingConfig = () => {
           <Route path="profile" element={<UserReport />} />
           <Route path="dashboard" element={<UserDashboard />} />
           <Route path="contacts" element={<ManageContacts />} />
+          <Route path="whatsApp" element={<SendWhatsAppMsg/>}/>
+          <Route path="email" element={<SendEmail/>}/>
           <Route
             path="calendar"
             element={
