@@ -1,15 +1,40 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import axiosInstance from "../config/axios.config";
 
 const UserLayout = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [data, setData] = useState(null);
     const navigate = useNavigate();
+
+    const user = JSON.parse(localStorage.getItem("loggedInUser") || "null");
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
         setIsLoggedIn(!!token);
+
+        const user = JSON.parse(localStorage.getItem("loggedInUser") || "null");
+
+        if (user && user.id) {
+            const fetchUserData = async () => {
+                try {
+                    const response = await axiosInstance.get(`users/${user.id}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    setData(response);
+                    console.log("Fetched user data:", response);
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            };
+
+            fetchUserData();
+        }
     }, []);
+
 
     const handleLogout = () => {
         Swal.fire({
@@ -50,8 +75,8 @@ const UserLayout = () => {
                                     alt="user"
                                 />
                             </div>
-                            <p className="text-xs font-medium text-gray-900">Kamal Basyal</p>
-                            <p className="text-xs text-gray-900 truncate mb-2">kamalbasyal987@gmail.com</p>
+                            <p className="text-xs font-medium text-gray-900">{user.f_name}</p>
+                            <p className="text-xs text-gray-900 truncate mb-2">{user.email}</p>
                             <NavLink
                                 to="/user/compose"
                                 className="flex items-center justify-between px-3 py-2 w-full text-xs text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"

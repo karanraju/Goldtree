@@ -72,7 +72,7 @@ const SendWhatsAppMsg = () => {
             <h2 className="text-2xl font-bold mb-4">Send Bulk WhatsApp Message</h2>
 
             <input
-                type="text"
+                type="number"
                 value={numberInput}
                 onChange={handleNumberInputChange}
                 onKeyDown={handleNumberInputKeyPress}

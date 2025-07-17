@@ -10,20 +10,30 @@ import { useNavigate } from "react-router-dom";
 const CreateGroup = () => {
     const navigate = useNavigate();
     const [groupName, setGroupName] = useState("");
+    const [groupType, setGroupType] = useState("");
     const [phoneNumbers, setPhoneNumbers] = useState([]);
     const [fileName, setFileName] = useState("");
     const [groups, setGroups] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
-    
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 1;
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentGroups = groups.slice(indexOfFirstItem, indexOfLastItem);
-
     const totalPages = Math.ceil(groups.length / itemsPerPage);
+
+    const validGroupTypes = ["Contact Group", "WhatsApp Group", "Email Group"];
+
+    const validationSchema = Yup.object({
+        groupName: Yup.string().min(2).max(20).required("Group name is required"),
+        fileName: Yup.string().required("File is required"),
+        contactList: Yup.array().min(1, "At least one number required").required(),
+        groupType: Yup.string()
+            .oneOf(validGroupTypes, "Invalid group type")
+            .required("Group type is required"),
+    });
 
     const fetchGroups = async () => {
         try {
@@ -49,12 +59,6 @@ const CreateGroup = () => {
     useEffect(() => {
         fetchGroups();
     }, []);
-
-    const validationSchema = Yup.object({
-        groupName: Yup.string().min(2).max(20).required("Group name is required"),
-        fileName: Yup.string().required("File is required"),
-        contactList: Yup.array().min(1, "At least one number required").required(),
-    });
 
     const handleXLSXUpload = (e) => {
         const file = e.target.files[0];
@@ -88,6 +92,7 @@ const CreateGroup = () => {
             groupName: groupName.trim(),
             fileName,
             contactList: phoneNumbers,
+            groupType,
         };
 
         try {
@@ -102,6 +107,7 @@ const CreateGroup = () => {
 
             alert("Group Created Successfully!");
             setGroupName("");
+            setGroupType("");
             setFileName("");
             setPhoneNumbers([]);
             setShowModal(false);
@@ -144,6 +150,7 @@ const CreateGroup = () => {
                         <tr>
                             <th className="px-6 py-3 border-b">ID</th>
                             <th className="px-6 py-3 border-b">Group Name</th>
+                            <th className="px-6 py-3 border-b">Group Type</th>
                             <th className="px-6 py-3 border-b">File Name</th>
                             <th className="px-6 py-3 border-b">Contact List</th>
                             <th className="px-6 py-3 border-b">Created By</th>
@@ -156,6 +163,7 @@ const CreateGroup = () => {
                             <tr key={group._id || index} className="hover:bg-gray-50">
                                 <td className="px-6 py-4 border-b">{group.id}</td>
                                 <td className="px-6 py-4 border-b">{group.groupName}</td>
+                                <td className="px-6 py-4 border-b">{group.groupType || "N/A"}</td>
                                 <td className="px-6 py-4 border-b">{group.fileName}</td>
                                 <td className="px-6 py-4 border-b">{group.contactList?.length || 0} contacts</td>
                                 <td className="px-6 py-4 border-b">{group.createdBy || "N/A"}</td>
@@ -189,11 +197,10 @@ const CreateGroup = () => {
                         <button
                             key={i}
                             onClick={() => setCurrentPage(i + 1)}
-                            className={`px-3 py-1 border rounded ${
-                                currentPage === i + 1
-                                    ? "bg-green-500 text-white"
-                                    : "bg-white hover:bg-gray-100"
-                            }`}
+                            className={`px-3 py-1 border rounded ${currentPage === i + 1
+                                ? "bg-green-500 text-white"
+                                : "bg-white hover:bg-gray-100"
+                                }`}
                         >
                             {i + 1}
                         </button>
@@ -214,6 +221,20 @@ const CreateGroup = () => {
                                 value={groupName}
                                 onChange={(e) => setGroupName(e.target.value)}
                             />
+                        </div>
+
+                        <div>
+                            <label className="block font-bold mb-1">Group Type</label>
+                            <select
+                                value={groupType}
+                                onChange={(e) => setGroupType(e.target.value)}
+                                className="block w-full border p-2 border-gray-400 rounded"
+                            >
+                                <option value="">-- Select Group Type --</option>
+                                {validGroupTypes.map((type) => (
+                                    <option key={type} value={type}>{type}</option>
+                                ))}
+                            </select>
                         </div>
 
                         <div>
