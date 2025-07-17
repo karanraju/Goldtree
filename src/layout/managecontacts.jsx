@@ -170,19 +170,22 @@ const ManageContacts = () => {
             ))}
           </tbody>
         </table>
+        {checkedContacts.size > 0 && (
 
-        <button
-          className="bg-green-600 text-white px-4 py-2 rounded mt-4"
-          onClick={() => {
-            const selectedContacts = Array.from(checkedContacts)
-              .map((index) => contacts[index]?.phoneNumber)
-              .filter(Boolean);
-            localStorage.setItem("selectedContacts", JSON.stringify(selectedContacts));
-            navigate("/user/calendar");
-          }}
-        >
-          Send Message
-        </button>
+          <button
+            className="bg-green-600 text-white px-4 py-2 rounded mt-4"
+            onClick={() => {
+              const selectedContacts = Array.from(checkedContacts)
+                .map((index) => contacts[index]?.phoneNumber)
+                .filter(Boolean);
+              localStorage.setItem("selectedContacts", JSON.stringify(selectedContacts));
+              navigate("/user/calendar");
+            }}
+          >
+            Send Message
+          </button>
+        )}
+
       </div>
 
       <div className="mt-4 flex justify-between text-sm text-gray-600">

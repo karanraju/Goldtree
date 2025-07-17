@@ -6,10 +6,12 @@ import * as Yup from "yup";
 import axiosInstance from "../../config/axios.config";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
+import { useContext } from "react";
+import AuthContext from "../../context/auth.context";
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const { setLoggedInUser } = useContext(AuthContext);
 
     const loginDto = Yup.object().shape({
         email: Yup.string().email("Invalid email").required("Email is compulsory"),
@@ -27,21 +29,21 @@ const LoginPage = () => {
     const submitForm = async (data) => {
         try {
             const response = await axiosInstance.post("users/login", data);
-            console.log(response);
-            const accessToken = response.token
+            const accessToken = response.token;
+            const loggedInUser = response.user;
+
             localStorage.setItem("accessToken", accessToken);
-            toast.success(`Welcomet to user Dashboard`)
+            localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+            setLoggedInUser(loggedInUser);
+
+            toast.success("Welcome to user Dashboard");
             setTimeout(() => {
                 navigate("/user/dashboard");
             }, 1000);
-
-
         } catch (error) {
             console.log(error);
-
             if (error.response) {
                 const { status, data: { message } } = error.response;
-
                 if (status === 404) {
                     setError("email", { type: "manual", message: "Email is not registered" });
                 } else if (status === 401) {
@@ -54,7 +56,6 @@ const LoginPage = () => {
             }
         }
     };
-
 
     return (
         <>
@@ -96,7 +97,10 @@ const LoginPage = () => {
                             <a className="text-gray-500 self-end hover:text-red-500 cursor-pointer">Forget Password?</a>
                         </div>
 
-                        <button type="submit" className="border-2 mt-4 rounded-full w-[70%] h-10 bg-pink-500 hover:bg-blue-500 text-white flex items-center justify-center">
+                        <button
+                            type="submit"
+                            className="border-2 mt-4 rounded-full w-[70%] h-10 bg-pink-500 hover:bg-blue-500 text-white flex items-center justify-center"
+                        >
                             Login
                         </button>
                     </form>
